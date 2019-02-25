@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Informationen zu</title>
+</head>
+<body>
+       <% var element=0; forEach(function(obj){ %>
+       	<br>
+	<% if(element==0) { %>
+          <b>ID:</b> <%= obj.id %> <br>
+	  <b>Name:</b> <%= obj.route.Name %> <br>
+ 	  <b>Dimension:</b> <%= obj.route.Dimension %> <br>
+	  
+	  <% var nodes=obj.route.Nodes; %>
+	  <% for(var i in nodes) { %>
+		<br>
+		<b>Desc</b><%= JSON.stringify(nodes[i].desc)%>:
+		<%= JSON.stringify(nodes[i].coords)%><br>
+       <% }  }element=1; %>
+	<% if(element==1) { %>
+	
+	<% var body=obj.body; %>
+	<% for(var i in body) { %>
+		<br>
+		<b><%=i %>:</b><%= JSON.stringify(body[i])%><br>
+       <% } %>
+		
+	<%}})%>
+
+
+</body>
+</html>

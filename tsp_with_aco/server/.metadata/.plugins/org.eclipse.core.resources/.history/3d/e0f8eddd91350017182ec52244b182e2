@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import models.Auftrag;
+
+
+
+
+public class MPI {
+
+	
+	public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException, FileNotFoundException, IOException {
+
+		System.out.println("Java-File started!");
+		String auftrag = read_file();
+		System.out.println(auftrag);
+		String message;
+	}
+	
+
+	private static String read_file() throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("testText.txt"));
+		String everything="";
+		try {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    everything = sb.toString();
+		} finally {
+		    br.close();
+			return everything;
+
+		}
+	}
+
+}
+
+

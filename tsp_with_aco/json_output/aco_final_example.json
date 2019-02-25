@@ -1,0 +1,21 @@
+{
+	"aco_final": {
+		"average_optimize": 7.04,
+		"available_cpu_cores": 8,
+		"marking_weakening": 0.99,
+		"used_cpu_cores": 4,
+		"probability_random_choice": 0.1,
+		"increment": 10,
+		"tourlength_start": 5358,
+		"iterations": 20000,
+		"tspjob_index": "a76be2e9-8b72-4d2f-94cd-77ae1455cfa9",
+		"mode": "ant",
+		"length_difference": 2409,
+		"tourlength_end": 2949,
+		"amount_city": 25,
+		"amount_ants": 10000,
+		"marking_gain": 0.99,
+		"scattersize": 2500,
+		"tourname": null
+	}
+}

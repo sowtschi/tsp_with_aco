@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="./css/vis.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jquery-ui.theme.min.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        #mynetwork {
+        width: 1200px;
+        height: 600px;
+        border: 1px solid lightgray;
+        background: beige;
+        }
+        .mynetworkMultiTSP {
+        width: 1200px;
+        height: 600px;
+        border: 1px solid lightgray;
+        background: beige;
+        }
+        .ui-tabs-vertical { width: 55em; }
+        .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
+        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+        .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+        .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
+    </style>
+</head>
+<body>
+
+<h2>Ameisen kalibrieren:</h2>
+<form id="calibrate_ants">
+<table>
+	<tr>
+		<td><p>Modus:</td> <td><input type="radio" name="MODE" value="multitsp" > Multi-ANT
+		<input type="radio" name="MODE" value="multitsp" checked>Multi-TSP</p></td>
+	</tr>
+	<tr>
+		<td><p>Ausgabe:</td> <td><input type="radio" name="MULTI_TSP_SYN_OPT" value="asyn" > Sync
+		<input type="radio" name="MULTI_TSP_SYN_OPT" value="asyn" checked>Async</p></td>
+	</tr>
+	<tr>
+		<td>Anzahl St&aumldte:</td><td><input id="ANZAHL_STAEDTE" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>Anzahl St&aumldte maximal:</td> <td><input id="ANZAHL_STAEDTE_MAXIMAL" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>Anzahl Ameisen:</td><td><input id="ANZAHL_AMEISEN" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>Wahrscheinlichkeit zuf&aumlllige Auswahl:</td><td><input id="WAHRSCHEINLICHKEIT_ZUFAELLIGE_AUSWAHL" type="number" min="0.000000001" max="0.99999999999999" step="0.1" value="0.25"> (0 < Wert 			<1)</td>
+	</tr>
+	<tr>
+		<td>Markierung Abschw&aumlchung:</td><td><input id="MARKIERUNG_ABSCHWAECHUNG" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>Markierung Verst&aumlrkung:</td><td><input id="MARKIERUNG_VERSTAERKUNG" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>Schrittweite:</td><td><input id="SCHRITTWEITE" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>Minimale Entfernung der St&aumldte:</td><td><input id="MINIMALE_ENTFERNUNG_DER_STAEDTE" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>FACO_ITERATIONS:</td><td><input id="FACO_ITERATIONS" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>ACO_REFRESH_RATE:</td><td><input id="ACO_REFRESH_RATE" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td>ACO_REFRESH_DELAY:</td><td><input id="ACO_REFRESH_DELAY" type="number" min="0" max="1" step="0.1" value="0.25"></td>
+	</tr>
+	<tr>
+		<td><p>Route importieren:
+		<input type="file" id="fileinput" />
+	</p></td>
+	</tr>
+</table>
+</form>
+<input type="button" onclick="myFunction()" value="Absenden">
+<script src="jfunc.js" type="text/javascript"></script>
+
+
+
+    <div id="mynetwork"></div>
+    <p id="tourlength"></p>
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-1">First-Tour</a></li>
+            <li><a href="#tabs-2">Second-Tour</a></li>
+        </ul>
+        <div id="tabs-1">
+            <div class="mynetworkMultiTSP"></div>
+        </div>
+        <div id="tabs-2">
+            <div class="mynetworkMultiTSP"></div>
+        </div>
+    </div>
+    <div id="tspOptimzeResults">
+        <ul>
+            <li id="average_optimize"></li>
+            <li id="available_cpu_cores"></li>
+            <li id="marking_weakening"></li>
+            <li id="used_cpu_cores"></li>
+            <li id="probability_random_choice"></li>
+            <li id="increment"></li>
+            <li id="tourlength_start"></li>
+            <li id="iterations"></li>
+            <li id="length_difference"></li>
+            <li id="tourlength_end"></li>
+            <li id="amount_city"></li>
+            <li id="amount_ants"></li>
+            <li id="marking_gain"></li>
+            <li id="scattersize"></li>
+        </ul>
+    </div>
+    <button id="startaco" >start</button>
+    <script src="./socket.io/socket.io.js">alert(window.location);</script>
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="./js/vis.min.js"></script>
+    <script>
+        $(function () {
+            $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+            $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+            var socket = io.connect();
+            socket.on("myMessage", function(message) {
+                console.log(message);
+            });
+            socket.on("sendOptimizeResult", function(message) {
+            	console.log(message);
+                $("#average_optimize").text("durchschnittliche Optimierung: " + message.aco_final.average_optimize);
+                $("#available_cpu_cores").text("verfügbare CPU-Kerne: " + message.aco_final.available_cpu_cores);
+                $("#marking_weakening").text("Markierung Abschwächung: " + message.aco_final.marking_weakening);
+                $("#used_cpu_cores").text("genutzte CPU-Kerne: " + message.aco_final.used_cpu_cores);
+                $("#probability_random_choice").text("WAHRSCHEINLICHKEIT_ZUFAELLIGE_AUSWAHL: " + message.aco_final.probability_random_choice);
+                $("#increment").text("SCHRITTWEITE: " + message.aco_final.increment);
+                $("#tourlength_start").text("Tourlänge start: " + message.aco_final.tourlength_start);
+                $("#iterations").text("ACO-Iterationen: " + message.aco_final.iterations);
+                $("#length_difference").text("Optimierung der Tour: " + message.aco_final.length_difference);
+                $("#tourlength_end").text("Tourlänge optimiert: " + message.aco_final.tourlength_end);
+                $("#amount_city").text("ANZAHL_STAEDTE: " + message.aco_final.amount_city);
+                $("#amount_ants").text("ANZAHL_AMEISEN: " + message.aco_final.amount_ants);
+                $("#marking_gain").text("MARKIERUNG_VERSTAERKUNG: " + message.aco_final.marking_gain);
+                $("#scattersize").text("Größe der verteilten Anteile pro Prozess: " + message.aco_final.scattersize);
+            });
+            socket.on("sendNodes", function(message) {
+                console.log(message);
+                
+                $("#tourlength").text("Tourlänge: " + message.aco_iteration.params.tourlength);
+                var nodeCounter = 0;
+                // create a DataSet
+                var options = {
+                    layout: {
+                        hierarchical: {
+                            sortMethod: 'directed'
+                        }
+                    }
+                };
+                var dataNodes = new vis.DataSet(options);
+                var jsonObjectNodes = message.aco_iteration.nodes;
+                for(var element in jsonObjectNodes) {
+                    //dataNodes.add({id: jsonObjectNodes[element].id, label: jsonObjectNodes[element].label});
+                    dataNodes.add(jsonObjectNodes[element]);
+                    nodeCounter++;
+                }
+                // create an array with nodes
+                var nodes = dataNodes;
+                var dataEdges = new vis.DataSet(options);
+                var jsonObjectEdges = message.aco_iteration.edges;
+                for(var element in jsonObjectEdges) {
+                    //dataEdges.add({id: jsonObjectEdges[element].id, label: jsonObjectEdges[element].label});
+                    for(var i = 0;i<nodeCounter;i++) {
+                        if(i!=jsonObjectEdges[element].from && i!=jsonObjectEdges[element].to) {
+                            dataEdges.add({from:jsonObjectEdges[element].from,to:i,color:'#D8D8D8'});
+                        }
+                    }
+                }
+                for(var element in jsonObjectEdges) {
+                    dataEdges.add(jsonObjectEdges[element]);
+                }
+                // create an array with edges
+                var edges = dataEdges;
+                // create a network
+                var container = document.getElementById('mynetwork');
+                var data = {
+                    nodes: nodes,
+                    edges: edges
+                };
+                var options = {
+                    edges: {
+                        smooth: false
+                    },
+                    interaction: {
+                        dragNodes: false,// do not allow dragging nodes
+                        zoomView: false, // do not allow zooming
+                        dragView: false  // do not allow dragging
+                    }
+                };
+                var network = new vis.Network(container, data, options);
+                network.moveTo({
+                    position: {x: 0, y: 0},
+                    offset: {x: -1200/2, y: -600/2},
+                    scale: 1
+                });
+            });
+            $('#startaco').click(function(){
+                socket.emit("getNodes", "Start TSPwithACO...");
+                return false;
+            });
+        });
+    </script>
+
+</body>
+</html>
+

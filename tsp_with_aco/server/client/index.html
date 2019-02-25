@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TSPwithACO Front-End</title>
+    <link href="./css/vis.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jquery-ui.structure.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/jquery-ui.theme.min.css" rel="stylesheet" type="text/css" />
+    <link href="./css/tspwithaco.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h1>TSP mit ACO</h1>
+<!-- ###USER-INPUT ### START### -->
+    <div id="user_input_wrapper">
+        <h2>Eingabeparameter kalibrieren:</h2>
+        <form id="calibrate_ants">
+        <table>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td><p>Modus:</td> <td><input type="radio" name="MODE" value="ant" id="radAntMode"><label for="radAntMode">Ant</label>
+                <input type="radio" name="MODE" value="multitsp" id="radMultiTSPMode" checked><label for="radMultiTSPMode">Multi-TSP</label></p></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td><p>Graph Modus:</td> <td><input type="radio" name="GRAPH_MODE" value="random" id="radGraphRandMode"><label for="radGraphRandMode">zuf&aumlllig</label>
+                <input type="radio" name="GRAPH_MODE" value="tspjob" checked id="radGraphTSPJobMode"><label for="radGraphTSPJobMode">per TSP-Job</label></p></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_multitsp" id="wrapper_MULTI_TSP_SYN_OPT">
+                <td><p>Ausgabe Multi-TSP:</td> <td><input type="radio" name="MULTI_TSP_SYN_OPT" value="asyn" id="radSynOptSync"><label for="radSynOptSync">Sync</label>
+                <input type="radio" name="MULTI_TSP_SYN_OPT" value="asyn" checked id="radSynOptAsync"><label for="radSynOptAsync">Async</label></p></td>
+            </tr>
+            <tr class="graph_mode_random mode_multitsp" id="wrapper_MULTI_TSP_RANDOM_AMOUNT_OPT">
+                <td>Anzahl zuf&aumllliger Multi-TSP Optimierungen:</td> <td><input id="MULTI_TSP_RANDOM_AMOUNT_OPT" type="number" min="2" max="1000" value="3"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp" id="wrapper_ANZAHL_STAEDTE">
+                <td>Anzahl St&aumldte:</td><td><input id="ANZAHL_STAEDTE" type="number" min="2" max="1000" step="20" value="42"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Anzahl Ameisen:</td><td><input id="ANZAHL_AMEISEN" type="number" min="2" max="100000" step="1" value="10000"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Wahrscheinlichkeit zuf&aumlllige Auswahl:</td><td><input id="WAHRSCHEINLICHKEIT_ZUFAELLIGE_AUSWAHL" type="number" min="0.1" max="0.9" step="0.1" value="0.1"> (0 < Wert 			<1)</td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Markierung Abschw&aumlchung:</td><td><input id="MARKIERUNG_ABSCHWAECHUNG" type="number" min="0" max="1" step="0.1" value="0.9"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Markierung Verst&aumlrkung:</td><td><input id="MARKIERUNG_VERSTAERKUNG" type="number" min="0" max="1" step="0.1" value="0.1"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Schrittweite:</td><td><input id="SCHRITTWEITE" type="number" min="0" max="100" step="5" value="10"></td>
+            </tr>
+            <tr class="graph_mode_random mode_ant mode_multitsp" id="wrapper_MINIMALE_ENTFERNUNG_DER_STAEDTE">
+                <td>Minimale Entfernung der St&aumldte:</td><td><input id="MINIMALE_ENTFERNUNG_DER_STAEDTE" type="number" min="0" max="800" step="50" value="50"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Anzahl ACO Iterationen:</td><td><input id="ACO_ITERATIONS" type="number" min="0" max="100000" step="1000" value="10000"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Schrittweite für Aktualisierung der Ausgabe:</td><td><input id="ACO_REFRESH_RATE" type="number" min="0" max="1000" step="100" value="100"></td>
+            </tr>
+            <tr class="graph_mode_random graph_mode_tspjob mode_ant mode_multitsp">
+                <td>Verzögerung für die Aktualisierung der Ausgabe (in ms):</td><td><input id="ACO_REFRESH_DELAY" type="number" min="0" max="10" step="1" value="1000"></td>
+            </tr>
+            <tr class="graph_mode_tspjob mode_ant mode_multitsp" id="wrapper_fileinput">
+                <td><p>Route importieren:
+                <input type="file" id="fileinput" />
+            </p></td>
+            </tr>
+            <tr class="graph_mode_tspjob mode_multitsp" id="wrapper_delete_job">
+                <td>Geladene Jobs:
+                    <select name="Jobs" id="Jobs"></select>
+                    <button id="btnShowJob" value="Delete">Show Job</button>
+                    <button id="btnDeleteJob" value="Delete">Delete Job</button>
+            </td></tr>
+            <tr><td>
+
+            </td></tr>
+        </table>
+        </form>
+        <button id="btnTSPJobUpload" value="Absenden">TSP Job uploaden und Einstellungen speichern</button>
+        <button id="startaco" >Start ACO</button>
+    </div>
+<!-- ###USER-INPUT ### END### -->
+<!-- ###SYSTEM-OUTPUT ### START### -->
+    <div id="system_output_wrapper">
+        <h2>Ausgabe der Ergebnisse:</h2>
+        <div id="output_antmode_wrapper">
+            <div id="mynetwork"></div>
+            <p id="tourlength"></p>
+            <div id="tspOptimzeResults">
+                <ul>
+                    <li id="average_optimize"></li>
+                    <li id="available_cpu_cores"></li>
+                    <li id="used_cpu_cores"></li>
+                    <li id="marking_weakening"></li>
+                    <li id="probability_random_choice"></li>
+                    <li id="increment"></li>
+                    <li id="tourlength_start"></li>
+                    <li id="tourlength_end"></li>
+                    <li id="length_difference"></li>
+                    <li id="iterations"></li>
+                    <li id="amount_city"></li>
+                    <li id="amount_ants"></li>
+                    <li id="marking_gain"></li>
+                    <li id="scattersize"></li>
+                </ul>
+            </div>
+        </div>
+        <div id="output_multitspmode_wrapper">
+            <div id="tabs">
+                <ul id="multitsp_tabnav">
+                    <!-- ###DYNMAIC-CONTENT### -->
+                </ul>
+                <div id="multitsp_content_wrapper">
+                    <!-- ###DYNMAIC-CONTENT### -->
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- ###SYSTEM-OUTPUT ### END### -->
+
+    <script type="text/javascript" src="./js/jfunc.js" ></script>
+    <script src="./socket.io/socket.io.js">alert(window.location);</script>
+    <script type="text/javascript" src="./js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="./js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="./js/vis.min.js"></script>
+    <script type="text/javascript" src="./js/guifunc.js"></script>
+    <script type="text/javascript" src="./js/socketfunc.js"></script>
+</body>
+</html>

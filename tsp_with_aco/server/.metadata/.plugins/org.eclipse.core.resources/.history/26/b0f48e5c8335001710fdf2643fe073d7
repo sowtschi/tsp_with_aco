@@ -1,0 +1,10 @@
+
+public class MPI {
+
+	
+	public static void main(String[] args) throws InterruptedException {
+		System.out.print("jojojo");
+		Thread.sleep(50000);
+
+	}
+}
